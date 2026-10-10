@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gallery | Olamide & Efemena</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&family=Alex+Brush&display=swap');
+
+:root {
+  --champagne: #F3E5AB;
+  --gold: #D4AF37;
+  --bg-cream: #FAF6EE;
+  --text-dark: #2D2721;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg-cream);
+  color: var(--text-dark);
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.font-cormorant {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.font-alex {
+  font-family: 'Alex Brush', cursive;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* HERO BACKGROUND & ANIMATION */
+.hero {
+  background: linear-gradient(135deg, #231E1A 0%, #685338 100%);
+}
+
+/* FLOATING DUST PARTICLES */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(243, 229, 171, 0.5) 0%, rgba(212, 175, 55, 0) 70%);
+  pointer-events: none;
+  animation: float-particle linear infinite;
+  z-index: 1;
+}
+.p1 { width: 12px; height: 12px; left: 15%; top: 75%; animation-duration: 25s; }
+.p2 { width: 7px; height: 7px; left: 35%; top: 85%; animation-duration: 18s; animation-delay: -5s; }
+.p3 { width: 14px; height: 14px; left: 75%; top: 80%; animation-duration: 30s; animation-delay: -10s; }
+.p4 { width: 8px; height: 8px; left: 88%; top: 70%; animation-duration: 22s; animation-delay: -3s; }
+
+@keyframes float-particle {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translateY(-45vh) translateX(40px) rotate(360deg); opacity: 0; }
+}
+
+/* PREMIUM ENTRY ANIMATIONS */
+.animate-fade-in-down {
+  animation: fadeInDown 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.animate-fade-in-up {
+  animation: fadeInUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* BUTTONS WITH PREMIUM EFFECTS */
+.btn-primary {
+  background: linear-gradient(135deg, #D4AF37 0%, #aa7c11 100%);
+  color: white;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f3e5ab 0%, #D4AF37 100%);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+}
+.btn-primary:hover::after {
+  opacity: 1;
+}
+
+.btn-secondary {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.btn-secondary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+}
+
+/* GALLERY GRID */
+.gallery {
+  column-count: 3;
+  column-gap: 16px;
+  padding: 20px;
+}
+
+@media(max-width:900px){ .gallery { column-count:2; } }
+@media(max-width:550px){ .gallery { column-count:1; } }
+
+.gallery img {
+  width: 100%;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.gallery img:hover {
+  transform: scale(1.02) translateY(-6px);
+  box-shadow: 0 15px 30px rgba(212,175,55,0.12);
+  border-color: rgba(212,175,55,0.3);
+}
+
+/* LIGHTBOX */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(45, 39, 33, 0.98);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 999;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 75%;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+/* FADE TRANSITION */
+.fade {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.fade.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* FLOATING MUSIC PLAYER */
+.player {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: white;
+  padding: 10px 15px;
+  border-radius: 30px;
+  box-shadow: 0 5px 20px rgba(0,0,0,.2);
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+@keyframes wave-bounce {
+  0%, 100% { height: 3px; }
+  50% { height: 12px; }
+}
+.wave-bar {
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  height: 3px;
+}
+.animate-wave .bar1 { animation: wave-bounce 0.6s infinite 0.1s; }
+.animate-wave .bar2 { animation: wave-bounce 0.8s infinite 0.3s; }
+.animate-wave .bar3 { animation: wave-bounce 0.5s infinite 0.0s; }
+.animate-wave .bar4 { animation: wave-bounce 0.7s infinite 0.2s; }
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<section class="hero min-h-[50vh] flex items-center justify-center text-white text-center px-4 relative overflow-hidden">
+  
+  <!-- Floating Gold Dust Particles -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+  </div>
+
+  <div class="fade z-10 max-w-3xl">
+    <span class="font-alex text-amber-300 text-3xl block mb-1 animate-fade-in-down">Our Visual Journey</span>
+    <h1 class="text-5xl md:text-6xl font-cormorant font-bold mb-4 tracking-wider animate-fade-in-up">Photo Gallery</h1>
+    <p id="gallerySubtitle" class="font-light tracking-wide text-sm md:text-base opacity-90 animate-fade-in-up">Moments of love, laughter, and beautiful memories</p>
+    
+    <div class="mt-8 flex gap-4 justify-center animate-fade-in-up">
+      <a href="../index.html" class="btn-secondary px-6 py-2.5 rounded-full font-semibold uppercase tracking-wider text-xs border border-white hover:bg-white hover:text-gray-900 transition duration-300">Home</a>
+      <button onclick="toggleSlideshow()" id="slideshowBtn" class="btn-primary px-6 py-2.5 rounded-full font-semibold uppercase tracking-wider text-xs">Start Slideshow</button>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM SOCIAL FEED -->
+<section class="py-16 text-center bg-stone-50/50 fade">
+  <div class="max-w-4xl mx-auto px-6">
+    <span class="font-alex text-amber-600 text-3xl block mb-2 font-semibold">From Our Socials</span>
+    <h2 class="text-3xl font-cormorant font-bold text-stone-800 mb-8" id="socialTitle">@olamide_efemena on Instagram</h2>
+    
+    <!-- LightWidget Container -->
+    <div id="lightwidgetContainer" class="hidden rounded-3xl overflow-hidden shadow-sm border border-stone-200/50 bg-white p-2 mb-8">
+      <iframe id="lightwidgetIframe" src="" style="width:100%;border:0;height:450px;border-radius:20px;"></iframe>
+    </div>
+
+    <!-- Fallback Beautiful Polaroid Grid -->
+    <div id="socialFallbackGrid" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+      <!-- Populated dynamically -->
+    </div>
+
+    <div class="text-center mt-6">
+      <a id="instagramLink" href="https://instagram.com/olamide_efemena" target="_blank" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-amber-500/30 text-amber-600 text-xs font-semibold uppercase hover:bg-amber-500 hover:text-white transition duration-300">
+        📸 Follow Our Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- LOCAL GALLERY -->
+<section class="py-16 fade">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="gallery" id="gallery">
+      <img src="./images/img-1.jpg" alt="Gallery Image 1">
+      <img src="./images/img-2.jpg" alt="Gallery Image 2">
+      <img src="./images/img-3.jpg" alt="Gallery Image 3">
+      <img src="./images/img-4.jpg" alt="Gallery Image 4">
+      <img src="./images/img-5.jpg" alt="Gallery Image 5">
+      <img src="./images/img-6.jpg" alt="Gallery Image 6">
+      <img src="./images/img-7.jpg" alt="Gallery Image 7">
+      <img src="./images/img-8.jpg" alt="Gallery Image 8">
+      <img src="./images/img-9.jpg" alt="Gallery Image 9">
+      <img src="./images/img-10.jpg" alt="Gallery Image 10">
+      <img src="./images/img-11.jpg" alt="Gallery Image 11">
+      <img src="./images/img-12.jpg" alt="Gallery Image 12">
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-4xl font-light hover:text-amber-500 focus:outline-none transition duration-200">&times;</button>
+  <img id="lightboxImg" src="" alt="Lightbox Image">
+  <div class="flex gap-8 mt-6">
+    <button onclick="prev()" class="px-6 py-2 rounded-full border border-white/30 text-white text-xs font-semibold uppercase hover:bg-white hover:text-stone-900 transition duration-300">Previous</button>
+    <button onclick="next()" class="px-6 py-2 rounded-full border border-white/30 text-white text-xs font-semibold uppercase hover:bg-white hover:text-stone-900 transition duration-300">Next</button>
+  </div>
+</div>
+
+<!-- FLOATING MUSIC PLAYER -->
+<div class="player fixed bottom-6 left-6 z-50 flex items-center bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-full border border-stone-100 shadow-lg hover:shadow-xl transition duration-300 hover:scale-[1.02]">
+  <button onclick="toggleMusic()" id="musicPlayBtn" class="w-10 h-10 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white flex items-center justify-center shadow-md focus:outline-none transition duration-300 hover:scale-105">
+    <span id="musicIcon" class="text-xs">▶</span>
+  </button>
+  <div class="ml-3 pr-2 flex items-center gap-3">
+    <div>
+      <p class="text-xs font-semibold text-stone-800 whitespace-nowrap">Our Song</p>
+      <p id="musicStatus" class="text-[10px] text-stone-500 whitespace-nowrap font-light">Paused</p>
+    </div>
+    <!-- Interactive bouncing visualizer wave bars -->
+    <div id="waveVisualizer" class="flex items-end gap-[2px] h-3 w-4 opacity-55">
+      <div class="wave-bar bar1 bg-amber-500 w-[2.5px] rounded-full"></div>
+      <div class="wave-bar bar2 bg-amber-500 w-[2.5px] rounded-full"></div>
+      <div class="wave-bar bar3 bg-amber-500 w-[2.5px] rounded-full"></div>
+      <div class="wave-bar bar4 bg-amber-500 w-[2.5px] rounded-full"></div>
+    </div>
+  </div>
+  <audio id="audio" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<script>
+
+/* CONFIGURATION */
+const config = {
+  weddingDate: "November 15, 2025",
+  instagramHandle: "olamide_efemena", // Edit with real handle
+  lightwidgetId: "", // Enter LightWidget ID if using widget-based live Instagram feed
+  socialPhotos: [
+    "./images/img-7.jpg",
+    "./images/img-8.jpg",
+    "./images/img-9.jpg",
+    "./images/img-10.jpg",
+    "./images/img-11.jpg",
+    "./images/img-12.jpg"
+  ]
+};
+
+/* FADE IN ANIMATION */
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('show');
+  });
+}, { threshold: 0.05 });
+document.querySelectorAll('.fade').forEach(el=>observer.observe(el));
+
+/* LIGHTBOX + SWIPE + NEXT/PREV */
+const images = document.querySelectorAll('.gallery img');
+let current = 0;
+
+images.forEach((img, i)=>{
+  img.onclick = ()=>{
+    current = i;
+    openLightbox(img.src);
+  };
+});
+
+function openLightbox(src){
+  document.getElementById('lightbox').style.display='flex';
+  document.getElementById('lightboxImg').src = src;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox(){
+  document.getElementById('lightbox').style.display='none';
+  document.body.style.overflow = 'auto';
+}
+
+function next(){
+  current++;
+  if(current >= images.length) current = 0;
+  document.getElementById('lightboxImg').src = images[current].src;
+}
+
+function prev(){
+  current--;
+  if(current < 0) current = images.length - 1;
+  document.getElementById('lightboxImg').src = images[current].src;
+}
+
+/* SWIPE GESTURE */
+let startX = 0;
+const lightbox = document.getElementById('lightbox');
+
+lightbox.addEventListener('touchstart', e=>{
+  startX = e.touches[0].clientX;
+}, { passive: true });
+
+lightbox.addEventListener('touchend', e=>{
+  let endX = e.changedTouches[0].clientX;
+  if(startX - endX > 60) next();
+  if(endX - startX > 60) prev();
+});
+
+/* AUTO SLIDESHOW */
+let slideshow = false;
+let slideInterval;
+
+function toggleSlideshow(){
+  slideshow = !slideshow;
+  const btn = document.getElementById('slideshowBtn');
+
+  if(slideshow){
+    btn.innerText = "Pause Slideshow";
+    btn.classList.add("filter", "brightness-95");
+    if(images.length > 0) openLightbox(images[current].src);
+    slideInterval = setInterval(()=>{
+      next();
+    }, 3000);
+  } else {
+    btn.innerText = "Start Slideshow";
+    btn.classList.remove("filter", "brightness-95");
+    clearInterval(slideInterval);
+  }
+}
+
+/* ORDINAL FORMATTER */
+function getOrdinal(n) {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+/* DYNAMIC YEARLY HEADER UPDATE */
+function updateDynamicHeaders() {
+  const start = new Date(config.weddingDate);
+  const now = new Date();
+  
+  let diffYears = now.getFullYear() - start.getFullYear();
+  let anniversaryThisYear = new Date(now.getFullYear(), start.getMonth(), start.getDate());
+  
+  let nextAnniversaryNum;
+  if (now < anniversaryThisYear) {
+    nextAnniversaryNum = diffYears;
+  } else {
+    nextAnniversaryNum = diffYears + 1;
+  }
+  
+  document.getElementById("gallerySubtitle").innerText = `Moments Celebrating Our ${getOrdinal(nextAnniversaryNum)} Year & Beyond`;
+}
+updateDynamicHeaders();
+
+/* SOCIAL FEED LOADER */
+function loadSocialFeed(){
+  const handle = config.instagramHandle || "olamide_efemena";
+  document.getElementById("socialTitle").innerText = `@${handle} on Instagram`;
+  document.getElementById("instagramLink").href = `https://instagram.com/${handle}`;
+  document.getElementById("instagramLink").innerHTML = `📸 Follow @${handle}`;
+  
+  if (config.lightwidgetId) {
+    document.getElementById("lightwidgetContainer").classList.remove("hidden");
+    document.getElementById("socialFallbackGrid").classList.add("hidden");
+    document.getElementById("lightwidgetIframe").src = `https://lightwidget.com/widgets/${config.lightwidgetId}.html`;
+  } else {
+    document.getElementById("lightwidgetContainer").classList.add("hidden");
+    const grid = document.getElementById("socialFallbackGrid");
+    grid.innerHTML = "";
+    
+    config.socialPhotos.forEach(src => {
+      const likes = Math.floor(Math.random() * 120) + 40;
+      const comments = Math.floor(Math.random() * 15) + 2;
+      
+      grid.innerHTML += `
+        <div class="relative group overflow-hidden rounded-2xl aspect-square shadow-sm bg-stone-100 cursor-pointer" onclick="openLightbox('${src}')">
+          <img src="${src}" alt="Social Photo" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center gap-6 text-white font-medium text-sm">
+            <span class="flex items-center gap-1">❤️ ${likes}</span>
+            <span class="flex items-center gap-1">💬 ${comments}</span>
+          </div>
+          <div class="absolute top-3 right-3 bg-black/40 backdrop-blur-sm text-white px-2 py-1 rounded-md text-[9px] uppercase font-semibold tracking-wider z-10">
+            Live
+          </div>
+        </div>
+      `;
+    });
+  }
+}
+loadSocialFeed();
+
+/* MUSIC CONTROLLER SYNCED VIA LOCALSTORAGE */
+const audio = document.getElementById('audio');
+const playBtn = document.getElementById('musicPlayBtn');
+const playIcon = document.getElementById('musicIcon');
+const playStatus = document.getElementById('musicStatus');
+const visualizer = document.getElementById('waveVisualizer');
+
+function toggleMusic(){
+  if(audio.paused){
+    audio.play();
+    playIcon.innerText = "⏸";
+    playBtn.classList.add("animate-spin-slow");
+    playStatus.innerText = "Playing";
+    visualizer.classList.add("animate-wave");
+    localStorage.setItem('music', 'on');
+  } else {
+    audio.pause();
+    playIcon.innerText = "▶";
+    playBtn.classList.remove("animate-spin-slow");
+    playStatus.innerText = "Paused";
+    visualizer.classList.remove("animate-wave");
+    localStorage.setItem('music', 'off');
+  }
+}
+
+/* KEEP MUSIC ACROSS PAGES */
+window.onload = ()=>{
+  if(localStorage.getItem('music') === 'on'){
+    audio.play().then(() => {
+      playIcon.innerText = "⏸";
+      playBtn.classList.add("animate-spin-slow");
+      playStatus.innerText = "Playing";
+      visualizer.classList.add("animate-wave");
+    }).catch(err => {
+      console.log("Autoplay blocked by browser. User interaction required.");
+      playStatus.innerText = "Paused";
+      visualizer.classList.remove("animate-wave");
+    });
+  } else {
+    visualizer.classList.remove("animate-wave");
+  }
+};
+
+</script>
+
+</body>
+</html>

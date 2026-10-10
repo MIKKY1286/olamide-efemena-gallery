@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Olamide & Efemena</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body { font-family: sans-serif; background:#FDF6E3; }
+.playfair { font-family:'Playfair Display', serif; }
+
+.card { background:white; border-radius:20px; padding:20px; }
+.btn { background:#D4AF37; color:white; padding:10px 20px; border-radius:20px; }
+
+.gallery img { border-radius:15px; height:200px; object-fit:cover; }
+</style>
+</head>
+
+<body class="p-4">
+
+<h1 class="text-4xl playfair text-center mb-6">Olamide & Efemena</h1>
+
+<!-- MARRIAGE TIMER -->
+<div class="text-center mb-10">
+<h2 class="text-xl">Time Together</h2>
+<p><span id="years"></span> yrs <span id="months"></span> months <span id="days"></span> days</p>
+</div>
+
+<!-- RSVP -->
+<div class="card max-w-md mx-auto mb-10">
+<h2 class="text-xl mb-4">RSVP</h2>
+
+<form id="rsvpForm">
+<input placeholder="Name" class="w-full mb-2 p-2 border" required>
+<input placeholder="Phone" class="w-full mb-2 p-2 border" required>
+<button class="btn w-full">Submit</button>
+</form>
+</div>
+
+<!-- GUESTBOOK -->
+<div class="card max-w-md mx-auto mb-10">
+<h2 class="text-xl mb-4">Guestbook</h2>
+
+<form id="guestForm">
+<input placeholder="Name" class="w-full mb-2 p-2 border" required>
+<textarea placeholder="Message" class="w-full mb-2 p-2 border"></textarea>
+<button class="btn w-full">Send</button>
+</form>
+
+<div id="messages"></div>
+</div>
+
+<!-- GALLERY UPLOAD -->
+<div class="card max-w-md mx-auto">
+<h2 class="text-xl mb-4">Upload Memory</h2>
+
+<input type="file" id="fileInput">
+<button onclick="uploadImage()" class="btn mt-2 w-full">Upload</button>
+
+<div id="gallery" class="grid grid-cols-2 gap-2 mt-4"></div>
+</div>
+
+<!-- QR -->
+<div class="text-center mt-10">
+<h3>Scan to RSVP</h3>
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://yourwebsite.com">
+</div>
+
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
+import { getFirestore, addDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-storage.js";
+
+/* CONFIG */
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_ID",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_ID",
+  appId: "YOUR_APP"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+/* RSVP */
+document.getElementById("rsvpForm").addEventListener("submit", async e=>{
+e.preventDefault();
+let name = e.target[0].value;
+let phone = e.target[1].value;
+
+await addDoc(collection(db,"rsvp"),{name,phone});
+
+alert("Saved!");
+});
+
+/* GUESTBOOK */
+const msgDiv = document.getElementById("messages");
+
+document.getElementById("guestForm").addEventListener("submit", async e=>{
+e.preventDefault();
+
+await addDoc(collection(db,"messages"),{
+name:e.target[0].value,
+text:e.target[1].value
+});
+});
+
+onSnapshot(collection(db,"messages"),snap=>{
+msgDiv.innerHTML="";
+snap.forEach(doc=>{
+let d=doc.data();
+msgDiv.innerHTML+=`<p><b>${d.name}:</b> ${d.text}</p>`;
+});
+});
+
+/* IMAGE UPLOAD */
+window.uploadImage = async ()=>{
+const file = document.getElementById("fileInput").files[0];
+if(!file) return;
+
+const storageRef = ref(storage, "images/"+file.name);
+await uploadBytes(storageRef,file);
+alert("Uploaded!");
+loadImages();
+};
+
+async function loadImages(){
+const listRef = ref(storage,"images");
+const res = await listAll(listRef);
+
+document.getElementById("gallery").innerHTML="";
+
+for(const item of res.items){
+const url = await getDownloadURL(item);
+document.getElementById("gallery").innerHTML += `<img src="${url}">`;
+}
+}
+loadImages();
+
+/* TIMER */
+function timer(){
+const start = new Date("Nov 15 2025");
+const now = new Date();
+
+let y = now.getFullYear()-start.getFullYear();
+let m = now.getMonth()-start.getMonth();
+let d = now.getDate()-start.getDate();
+
+if(d<0){m--;d+=30;}
+if(m<0){y--;m+=12;}
+
+years.innerText=y;
+months.innerText=m;
+days.innerText=d;
+}
+setInterval(timer,1000);
+
+</script>
+
+</body>
+</html>
