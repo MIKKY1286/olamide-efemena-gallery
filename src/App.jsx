@@ -1,21 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import ScrollProgressBar from "./components/ScrollProgressBar";
 import FloatingAccents from "./components/FloatingAccents";
 import HeroSection from "./components/HeroSection";
 import AnimatedStats from "./components/AnimatedStats";
-import JourneyTimeline from "./components/JourneyTimeline";
 import SectionDivider from "./components/SectionDivider";
-// import SocialFeed from "./components/SocialFeed";
-import GalleryGrid from "./components/GalleryGrid";
-import Lightbox from "./components/Lightbox";
-import MusicPlayer from "./components/MusicPlayer";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
-import Scrapbook from "./components/Scrapbook";
-import AutoExplore from "./components/AutoExplore";
 import AisleWalk from "./components/AisleWalk";
-import CustomCursor from "./components/CustomCursor";
+import MusicPlayer from "./components/MusicPlayer";
 import { useScrollReveal } from "./hooks/useScrollReveal";
+
+const Scrapbook = lazy(() => import("./components/Scrapbook"));
+const GalleryGrid = lazy(() => import("./components/GalleryGrid"));
+const Lightbox = lazy(() => import("./components/Lightbox"));
+const AutoExplore = lazy(() => import("./components/AutoExplore"));
 
 const config = {
   weddingDate: "November 15, 2025",
@@ -105,14 +103,15 @@ function App() {
   // Initialize IntersectionObserver scroll reveal
   useScrollReveal(".fade");
 
-  // Sync body scroll with lightbox open status
+  // Sync body scroll with modal open status without overriding stylesheet overflow-x
   useEffect(() => {
-    if (lightboxOpen) {
-      document.body.style.overflow = "hidden";
+    if (lightboxOpen || isAutoExploreOpen) {
+      document.body.style.overflowY = "hidden";
     } else {
-      document.body.style.overflow = "auto";
+      document.body.style.overflowY = "";
+      document.body.style.overflow = "";
     }
-  }, [lightboxOpen]);
+  }, [lightboxOpen, isAutoExploreOpen]);
 
   // Slideshow interval timer
   useEffect(() => {
@@ -177,7 +176,6 @@ function App() {
 
   return (
     <>
-      <CustomCursor />
       <ScrollProgressBar />
       <FloatingAccents />
 
@@ -196,41 +194,44 @@ function App() {
       
       <SectionDivider variant="heart" />
 
-      <Scrapbook images={galleryImages} />
-
-      {/* <SectionDivider variant="heart" />
-
-      <SocialFeed
-        config={config}
-        onOpenLightbox={(src) => handleOpenLightbox(src)}
-      /> */}
+      <Suspense fallback={<div className="py-24 bg-stone-950 min-h-[400px]" />}>
+        <Scrapbook images={galleryImages} />
+      </Suspense>
 
       <SectionDivider variant="sparkles" />
 
-      <GalleryGrid
-        images={galleryImages}
-        onImageClick={(idx) => handleOpenLightbox(idx)}
-      />
+      <Suspense fallback={<div className="py-24 bg-stone-950 min-h-[400px]" />}>
+        <GalleryGrid
+          images={galleryImages}
+          onImageClick={(idx) => handleOpenLightbox(idx)}
+        />
+      </Suspense>
 
       <Footer />
 
-      <Lightbox
-        isOpen={lightboxOpen}
-        currentSrc={activeImageSrc}
-        onClose={handleCloseLightbox}
-        onNext={handleNext}
-        onPrev={handlePrev}
-      />
+      {lightboxOpen && (
+        <Suspense fallback={null}>
+          <Lightbox
+            isOpen={lightboxOpen}
+            currentSrc={activeImageSrc}
+            onClose={handleCloseLightbox}
+            onNext={handleNext}
+            onPrev={handlePrev}
+          />
+        </Suspense>
+      )}
 
       <MusicPlayer />
 
       <BackToTop />
 
       {isAutoExploreOpen && (
-        <AutoExplore
-          images={galleryImages}
-          onClose={() => setIsAutoExploreOpen(false)}
-        />
+        <Suspense fallback={null}>
+          <AutoExplore
+            images={galleryImages}
+            onClose={() => setIsAutoExploreOpen(false)}
+          />
+        </Suspense>
       )}
     </>
   );

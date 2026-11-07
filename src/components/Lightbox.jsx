@@ -21,7 +21,7 @@ const Lightbox = ({ isOpen, currentSrc, onClose, onNext, onPrev }) => {
 
   return (
     <div
-      class="lightbox"
+      className="lightbox"
       id="lightbox"
       style={{ display: "flex" }}
       onTouchStart={handleTouchStart}
@@ -29,21 +29,21 @@ const Lightbox = ({ isOpen, currentSrc, onClose, onNext, onPrev }) => {
     >
       <button
         onClick={onClose}
-        class="absolute top-6 right-6 text-white text-4xl font-light hover:text-amber-500 focus:outline-none transition duration-200"
+        className="absolute top-6 right-6 text-white text-4xl font-light hover:text-amber-500 focus:outline-none transition duration-200 cursor-pointer"
       >
         &times;
       </button>
-      <img id="lightboxImg" src={currentSrc} alt="Lightbox Image" />
-      <div class="flex gap-8 mt-6">
+      <img id="lightboxImg" src={currentSrc} alt="Lightbox Image" decoding="async" />
+      <div className="flex gap-8 mt-6">
         <button
           onClick={onPrev}
-          class="px-6 py-2 rounded-full border border-white/30 text-white text-xs font-semibold uppercase hover:bg-white hover:text-stone-900 transition duration-300"
+          className="px-6 py-2 rounded-full border border-white/30 text-white text-xs font-semibold uppercase hover:bg-white hover:text-stone-900 transition duration-300 cursor-pointer"
         >
           Previous
         </button>
         <button
           onClick={onNext}
-          class="px-6 py-2 rounded-full border border-white/30 text-white text-xs font-semibold uppercase hover:bg-white hover:text-stone-900 transition duration-300"
+          className="px-6 py-2 rounded-full border border-white/30 text-white text-xs font-semibold uppercase hover:bg-white hover:text-stone-900 transition duration-300 cursor-pointer"
         >
           Next
         </button>

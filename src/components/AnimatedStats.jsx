@@ -53,15 +53,15 @@ const StatCard = ({ icon: Icon, label, target, suffix, isVisible }) => {
   }, [isVisible, target]);
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 rounded-2xl bg-stone-800/40 backdrop-blur-md border border-amber-500/10 shadow-lg hover:shadow-[0_0_30px_rgba(245,158,11,0.15)] hover:-translate-y-2 group transition duration-500">
-      <div className="w-14 h-14 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-amber-500/20 transition duration-300">
+    <div className="flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl bg-stone-800/40 backdrop-blur-md border border-amber-500/10 shadow-lg hover:shadow-[0_0_30px_rgba(245,158,11,0.15)] hover:-translate-y-2 group transition duration-500 text-center">
+      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 group-hover:bg-amber-500/20 transition duration-300">
         <Icon size={24} />
       </div>
-      <span className="text-4xl md:text-5xl font-cormorant font-bold text-white tracking-tight mb-1 group-hover:text-amber-400 transition duration-300">
+      <span className="text-3xl sm:text-4xl md:text-5xl font-cormorant font-bold text-white tracking-tight mb-1 group-hover:text-amber-400 transition duration-300">
         {count}
         {suffix}
       </span>
-      <span className="text-xs uppercase tracking-widest font-semibold text-stone-400 mt-1">
+      <span className="text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest font-semibold text-stone-400 mt-1">
         {label}
       </span>
     </div>
@@ -95,11 +95,11 @@ const AnimatedStats = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-16 px-4 bg-stone-900 relative fade">
+    <section ref={sectionRef} className="py-16 px-4 bg-stone-900 relative overflow-hidden fade">
       {/* Subtle top border gradient */}
       <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
       
-      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 relative z-10">
+      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 relative z-10">
         {statsData.map((stat, idx) => (
           <StatCard key={idx} {...stat} isVisible={isVisible} />
         ))}

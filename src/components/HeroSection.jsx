@@ -8,6 +8,8 @@ const HeroSection = ({ subtitle, slideshow, onToggleSlideshow, onOpenAutoExplore
         <img 
           src="/images/img-5.webp" 
           alt="Hero Background" 
+          fetchPriority="high"
+          decoding="async"
           className="w-full h-full object-cover object-[50%_35%] animate-ken-burns opacity-60 mix-blend-overlay"
         />
       </div>
@@ -17,20 +19,20 @@ const HeroSection = ({ subtitle, slideshow, onToggleSlideshow, onOpenAutoExplore
 
       {/* Subtle Moving Background Light Orbs */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute -top-20 -left-20 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[100px] animate-pulse"></div>
-        <div className="absolute -bottom-20 -right-20 w-[500px] h-[500px] bg-amber-700/15 rounded-full blur-[100px] animate-pulse delay-700"></div>
+        <div className="absolute -top-20 -left-20 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-amber-500/10 rounded-full blur-[80px] sm:blur-[100px]"></div>
+        <div className="absolute -bottom-20 -right-20 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-amber-700/15 rounded-full blur-[80px] sm:blur-[100px]"></div>
       </div>
 
-      <div className="fade show z-10 max-w-4xl mt-12 pointer-events-none relative">
-        <span className="font-alex text-amber-500 text-4xl md:text-5xl block mb-4 animate-fade-in-down drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+      <div className="fade show z-10 w-full max-w-4xl px-2 mt-12 pointer-events-none relative">
+        <span className="font-alex text-amber-500 text-3xl sm:text-4xl md:text-5xl block mb-4 animate-fade-in-down drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
           The Adventure Begins
         </span>
-        <h1 className="text-6xl md:text-8xl font-cormorant font-bold mb-6 tracking-widest animate-fade-in-up drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+        <h1 className="text-4xl sm:text-6xl md:text-8xl font-cormorant font-bold mb-6 tracking-wider sm:tracking-widest animate-fade-in-up drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
           OUR STORY
         </h1>
         <p
           id="gallerySubtitle"
-          className="font-light tracking-[0.2em] text-sm md:text-lg text-stone-300 opacity-90 animate-fade-in-up uppercase"
+          className="font-light tracking-[0.12em] sm:tracking-[0.2em] text-xs sm:text-sm md:text-lg text-stone-300 opacity-90 animate-fade-in-up uppercase break-words"
         >
           {subtitle}
         </p>
