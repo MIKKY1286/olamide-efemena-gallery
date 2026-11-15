@@ -6,7 +6,7 @@ import { Camera, Heart, Calendar, Sparkles } from 'lucide-react';
  * Example milestone date: November 15th (Month index 6, Day 31).
  * Every November 15th, the year count increments automatically.
  */
-function calculateYearsTogether(startDate = new Date(2025, 11, 15)) {
+function calculateYearsTogether(startDate = new Date(2025, 10, 15)) {
   const now = new Date();
   let years = now.getFullYear() - startDate.getFullYear();
 

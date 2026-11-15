@@ -424,17 +424,16 @@ function updateDynamicHeaders() {
   const start = new Date(config.weddingDate);
   const now = new Date();
   
-  let diffYears = now.getFullYear() - start.getFullYear();
+  let years = now.getFullYear() - start.getFullYear();
   let anniversaryThisYear = new Date(now.getFullYear(), start.getMonth(), start.getDate());
   
-  let nextAnniversaryNum;
   if (now < anniversaryThisYear) {
-    nextAnniversaryNum = diffYears;
-  } else {
-    nextAnniversaryNum = diffYears + 1;
+    years--;
   }
   
-  document.getElementById("gallerySubtitle").innerText = `Moments Celebrating Our ${getOrdinal(nextAnniversaryNum)} Year & Beyond`;
+  let anniversaryNum = Math.max(1, years);
+  
+  document.getElementById("gallerySubtitle").innerText = `Moments Celebrating Our ${getOrdinal(anniversaryNum)} Year & Beyond`;
 }
 updateDynamicHeaders();
 

@@ -75,21 +75,20 @@ function calculateSubtitle() {
   const start = new Date(config.weddingDate);
   const now = new Date();
 
-  let diffYears = now.getFullYear() - start.getFullYear();
-  let anniversaryThisYear = new Date(
+  let years = now.getFullYear() - start.getFullYear();
+  const anniversaryThisYear = new Date(
     now.getFullYear(),
     start.getMonth(),
     start.getDate(),
   );
 
-  let nextAnniversaryNum;
   if (now < anniversaryThisYear) {
-    nextAnniversaryNum = diffYears;
-  } else {
-    nextAnniversaryNum = diffYears + 1;
+    years--;
   }
 
-  return `Moments Celebrating Our ${getOrdinal(nextAnniversaryNum)} Year & Beyond`;
+  const anniversaryNum = Math.max(1, years);
+
+  return `Moments Celebrating Our ${getOrdinal(anniversaryNum)} Year & Beyond`;
 }
 
 function App() {
